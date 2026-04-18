@@ -44,55 +44,78 @@ async function run() {
     // https://localhost:3000/books?page=1&limit=8&sortBy-titlesorder-asc
     //---------Find all books GET----------
     app.get("/books", async (req, res) => {
-      const {page, limit, genre, minYear, maxYear, author, minPrice, maxPrice, sortBy, order, search} = req.query
+      const {
+        page,
+        limit,
+        genre,
+        minYear,
+        maxYear,
+        author,
+        minPrice,
+        maxPrice,
+        sortBy,
+        order,
+        search,
+      } = req.query;
       try {
         //-----------Pagination---------
-        const currentPage = Math.max(1, parseInt(page) || 1)
+        const currentPage = Math.max(1, parseInt(page) || 1);
         const perPage = parseInt(limit) || 10;
-        const skip = (currentPage - 1) * perPage
+        const skip = (currentPage - 1) * perPage;
 
-       //---------Filters----------
+        //---------Filters----------
         const filter = {};
-        if(search){
+        if (search) {
           filter.$or = [
-            {title: {$regex: search, $options: "i"}},
-            {description: {$regex: search, $options: "i"}},
-            {author: {$regex: search, $options: "i"}},
-          ]
+            { title: { $regex: search, $options: "i" } },
+            { description: { $regex: search, $options: "i" } },
+            { author: { $regex: search, $options: "i" } },
+          ];
         }
 
         //--------Category-------
-        if(genre) {
-          filter.genre = genre
+        if (genre) {
+          filter.genre = genre;
         }
 
-       //----------MinYear and MaxYear------
-       if(minYear || maxYear) {
-         filter.publishedYear = {
-          ...minYear && {$get: parseInt(minYear)},
-          ...maxYear && {$lte: parseInt(maxYear)}
-         }
-       }
-
-       //-------High Price and Low Price ------
-       if(minPrice || maxPrice) {
-        filter.price = {
-          ...minPrice && {$get: parseInt(minPrice)},
-          ...maxPrice && {$get: parseInt(maxPrice)}
+        //----------MinYear and MaxYear------
+        if (minYear || maxYear) {
+          filter.publishedYear = {
+            ...(minYear && { $gte: parseInt(minYear) }),
+            ...(maxYear && { $lte: parseInt(maxYear) }),
+          };
         }
-       }
 
+        //-------High Price and Low Price ------
+        if (minPrice || maxPrice) {
+          filter.price = {
+            ...(minPrice && { $gte: parseInt(minPrice) }),
+            ...(maxPrice && { $lte: parseInt(maxPrice) }),
+          };
+        }
 
+        //-------Author--------
+        if (author) filter.author = author;
 
+        //-------------ShortBy------Books---------
+        const shortOptions = { [sortBy || title]: order === "desc" ? -1 : 1 };
 
+        const [books, totalBooks] = await Promise.all([
+          booksCollection
+            .find(filter)
+            .sort(shortOptions)
+            .skip(skip)
+            .limit(perPage)
+            .toArray(),
+          booksCollection.countDocuments(filter),
+        ]);
 
-        const books = await booksCollection.find(filter).toArray();
-        res.status(201).json({ message: "Finded All books!", books });
+        //const books = await booksCollection.find(filter).toArray();
+        res.status(201).json({ message: "Finded All books!", books, totalBooks, currentPage, totalPages: Math.ceil(totalBooks / perPage)});
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
     });
-
 
     //---------Find single books GET----------
     app.get("/books/:id", async (req, res) => {
@@ -104,20 +127,6 @@ async function run() {
         res.status(500).json({ error: error.message });
       }
     });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
@@ -138,6 +147,3 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
-//book-management-app
-//crqJAH8IPVSWiYZG
