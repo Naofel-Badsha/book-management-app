@@ -44,20 +44,21 @@ async function run() {
     // https://localhost:3000/books?page=1&limit=8&sortBy-titlesorder-asc
     //---------Find all books GET----------
     app.get("/books", async (req, res) => {
-      const {
-        page,
-        limit,
-        genre,
-        minYear,
-        maxYear,
-        author,
-        minPrice,
-        maxPrice,
-        sortBy,
-        order,
-        search,
-      } = req.query;
       try {
+        const {
+          page,
+          limit,
+          genre,
+          minYear,
+          maxYear,
+          author,
+          minPrice,
+          maxPrice,
+          sortBy,
+          order,
+          search,
+        } = req.query;
+
         //-----------Pagination---------
         const currentPage = Math.max(1, parseInt(page) || 1);
         const perPage = parseInt(limit) || 10;
@@ -95,10 +96,12 @@ async function run() {
         }
 
         //-------Author--------
-        if (author) filter.author = author;
+        if (author) {
+          filter.author = { $regex: author, $options: "i" };
+        }
 
         //-------------ShortBy------Books---------
-        const shortOptions = { [sortBy || title]: order === "desc" ? -1 : 1 };
+        const shortOptions = { [sortBy || "title"]: order === "desc" ? -1 : 1 };
 
         const [books, totalBooks] = await Promise.all([
           booksCollection
@@ -111,7 +114,13 @@ async function run() {
         ]);
 
         //const books = await booksCollection.find(filter).toArray();
-        res.status(201).json({ message: "Finded All books!", books, totalBooks, currentPage, totalPages: Math.ceil(totalBooks / perPage)});
+        res.status(201).json({
+          message: "Finded All books!",
+          books,
+          totalBooks,
+          currentPage,
+          totalPages: Math.ceil(totalBooks / perPage),
+        });
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
@@ -119,10 +128,39 @@ async function run() {
 
     //---------Find single books GET----------
     app.get("/books/:id", async (req, res) => {
+      const bookId = req.params.id;
+      try {
+        const book = await booksCollection.findOne({
+          _id: new ObjectId(bookId),
+        });
+        if (!book) return res.status(404).json({ message: "Book not found" });
+        res.status(201).json({ message: "Finded Single book!", book });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    //------------Put----Update---Books---------
+    app.put("/books/:id", async (req, res) => {
+      try {
+        const updateBook = await booksCollection.updateOne(
+          { _id: new ObjectId(req.params.id) },
+          { $set: req.body },
+        );
+        res.status(201).json({ message: "Finded Single book!", updateBook });
+      } catch (error) {
+        res.status(500).json({ error: error.message });
+      }
+    });
+
+    //---------Delete------Books--------
+    app.delete("/books/:id", async (req, res) => {
       try {
         const { id } = req.params;
-        const books = await booksCollection.findOne({ _id: new ObjectId(id) });
-        res.status(201).json({ message: "Finded Single book!", books });
+        const books = await booksCollection.deleteOne({
+          _id: new ObjectId(id),
+        });
+        res.status(201).json({ message: "Deleted Single book!", books });
       } catch (error) {
         res.status(500).json({ error: error.message });
       }
