@@ -53,7 +53,7 @@ const Navbar = () => {
 
       {/* Mobile Menu (Dropdown) */}
       {isOpen && (
-        <div className="md:hidden bg-gray-50 border-t border-gray-200">
+        <div className="absolute top-16 left-0 w-full bg-white shadow-lg border-t border-gray-100 md:hidden z-50">
           <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
             {navLinks.map((link) => (
               <a
