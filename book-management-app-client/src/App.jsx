@@ -1,4 +1,5 @@
 import "./App.css";
+import Dashboard from "./Dashboard/Dashboard";
 import Footer from "./Shared/Footer/Footer";
 import Navbar from "./Shared/Navbar/Navbar";
 
@@ -9,6 +10,7 @@ function App() {
       <h1> Hello Developers</h1>
       <h2>How are you</h2>
       <Footer />
+      <Dashboard />
     </div>
   );
 }
