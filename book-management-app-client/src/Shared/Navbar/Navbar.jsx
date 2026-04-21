@@ -1,23 +1,24 @@
 import React from 'react'
-import  { useState } from 'react';
+import { useState } from 'react';
 import { HiBars3 } from 'react-icons/hi2';
 import { LiaTimesSolid } from 'react-icons/lia';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
-    const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const navLinks = [
     { name: 'Home', href: '/' },
     { name: 'Shop', href: '/shop' },
     { name: 'About', href: '/about' },
-    { name: 'Blog', href: '/blog' },
+    { name: 'Blogs', href: '/blogs' },
     { name: 'Contact', href: '/contact' },
   ];
   return (
     <nav className="bg-white shadow-md w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          
+
           {/* Logo Section */}
           <div className="flex-shrink-0 flex items-center">
             <span className="text-2xl font-bold text-blue-600">MY-SHOP</span>
@@ -34,9 +35,11 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 cursor-pointer">
+                Login
+              </button>
+            </Link>
           </div>
 
           {/* Mobile Button Section */}
@@ -64,9 +67,11 @@ const Navbar = () => {
                 {link.name}
               </a>
             ))}
-            <button className="w-full text-left px-3 py-2 text-base font-medium text-blue-600">
-              Login
-            </button>
+            <Link to="/login">
+              <button className="w-full text-left px-3 py-2 text-base font-medium text-blue-600">
+                Login
+              </button>
+            </Link>
           </div>
         </div>
       )}
