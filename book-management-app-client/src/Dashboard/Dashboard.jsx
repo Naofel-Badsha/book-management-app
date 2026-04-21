@@ -1,5 +1,5 @@
 import React from "react";
-import React, { useState } from "react";
+import { useState } from "react";
 import { FaBars, FaBell, FaDashcube, FaSatellite, FaSearch, FaTimes, FaUsers, FaWolfPackBattalion } from "react-icons/fa";
 import { FaSpaghettiMonsterFlying } from "react-icons/fa6";
 
