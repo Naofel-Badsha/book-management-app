@@ -10,7 +10,7 @@ export const BookProvider = ({ children }) => {
   const [error, setError] = useState(null);
 
   //----------To banckend----------
-  const [filter, setFilter] = useState({
+  const [filters, setFilters] = useState({
     page: 1,
     limit: 8,
     genre: '',
@@ -38,7 +38,7 @@ export const BookProvider = ({ children }) => {
       setError(null);
 
       const params = new URLSearchParams();
-      Object.entries(filter).forEach(([key, value]) => {
+      Object.entries(filters).forEach(([key, value]) => {
         if (value !== '') {
           params.append(key, value)
         }
@@ -46,17 +46,55 @@ export const BookProvider = ({ children }) => {
 
       const response = await axios.get("http://localhost:3000/books");
       setBooks(response.data.books);
+      setPagination({
+        currentPage: response.data.currentPage,
+        totalBooks: response.data.totalBooks,
+        totalPages: response.data.totalPages
+      })
+
     } catch (error) {
-      console.log(error);
+      setError(error.message)
+    } finally {
+      setLoading(false)
     }
-  })
+  }, [filters])
+
+  //-------Data aser por book k null korere jonno ------
+  const clearCurrentBook = useCallback(() => {
+    setBooks()
+  }, [])
 
 
+  //----------Update filter books-------------
+  const updateFilters = useCallback(async (newFilters) => {
+    setFilters(prev => ({
+      ...prev,
+      ...newFilters,
+      page: newFilters.hasOwnProperty('page') ? newFilters.page : 1
+    }))
+  }, [])
 
+
+  //-----------Single Books Details----------
+  const fetchBookDetails = useCallback(async (bookId) => {
+    try {
+      setLoading(true);
+      setError(null)
+
+      const response = await axios.get(`http://localhost:3000/books/${bookId}`)
+      setCurrentBook(response.data);
+      return response.data
+    } catch (error) {
+      setError(error.message)
+      throw error
+    } finally {
+      setFilters(false)
+    }
+  }, [])
 
   useEffect(() => {
     fetchBooks();
-  }, []);
+  }, [filters]);
 
 
 
@@ -65,6 +103,12 @@ export const BookProvider = ({ children }) => {
     currentBook,
     loading,
     error,
+    filters,
+    pagination,
+    fetchBooks,
+    updateFilters,
+    fetchBookDetails
+
   };
 
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
