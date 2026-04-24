@@ -9,11 +9,17 @@ const Home = () => {
     <div>
       <HeroSection />
       {/*----------------All Books-----------------*/}
-      <div className="">
-        <h1>All Books: {books.length} </h1>
+      <div className="container mx-auto">
+       {books.length > 0 ? <div >
+        {books.map((book, _id) => (
+          <div key={book._id}>
+          <h1>{book.title}</h1>
+        </div>))}
+       </div> : "Book Not Found"}
       </div>
     </div>
   );
 };
 
 export default Home;
+ 

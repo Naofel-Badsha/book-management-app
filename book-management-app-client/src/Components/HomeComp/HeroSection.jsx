@@ -1,8 +1,23 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FaSearch } from 'react-icons/fa';
+import { useBooks } from '../../Context/BookContext';
 
 const HeroSection = () => {
+  const {books, filters, updateFilters} = useBooks()
+  const [searchInput, setSearchInput] = useState('')
+
+const hendleSunmit = (e) => {
+  e.preventDefault();
+  console.log("Search Value:", searchInput);
+
+  updateFilters({
+    search: searchInput.trim(),
+    page: 1,
+  });
+};
+
+
   return (
     <section className="bg-[#0f172a] min-h-screen flex items-center justify-center p-8 text-white font-sans">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between gap-12">
@@ -19,14 +34,18 @@ const HeroSection = () => {
               <div className="pl-4 text-gray-400">
                 <FaSearch size={20} />
               </div>
-              <input
-                type="text"
-                placeholder="Enter title"
-                className="w-full bg-transparent py-3 px-4 outline-none text-sm text-gray-200 placeholder-gray-500"
-              />
-              <button className="bg-[#155DFC] hover:bg-[#0b41b6] text-white cursor-pointer font-bold py-2 px-6 rounded-full m-1 transition-colors uppercase text-xs tracking-wider">
-                Search
-              </button>
+              <form onSubmit={hendleSunmit} action="" className='flex items-center justify-between w-full'>
+                <input
+                   value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  type="text"
+                  placeholder="Enter title"
+                  className="w-full bg-transparent py-3 px-4 outline-none text-sm text-gray-200 placeholder-gray-500"
+                />
+                <button type='submit' className="bg-[#155DFC] hover:bg-[#0b41b6] text-white cursor-pointer font-bold py-2 px-6 rounded-full m-2 transition-colors uppercase text-xs tracking-wider">
+                  Search
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -47,7 +66,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-{/* https://i.ibb.co.com/4R8B37ph/imageye-imgi-127-remember-welldesigned-book-cover-is-investment-success-your-book-so-take-time-1.webp */}
+        {/* https://i.ibb.co.com/4R8B37ph/imageye-imgi-127-remember-welldesigned-book-cover-is-investment-success-your-book-so-take-time-1.webp */}
       </div>
     </section>
   )

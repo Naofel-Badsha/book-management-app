@@ -65,7 +65,7 @@ export const BookProvider = ({ children }) => {
   }, [])
 
 
-  //----------Update filter books-------------
+//----------Update filter books-------------
   const updateFilters = useCallback(async (newFilters) => {
     setFilters(prev => ({
       ...prev,
@@ -108,7 +108,6 @@ export const BookProvider = ({ children }) => {
     fetchBooks,
     updateFilters,
     fetchBookDetails
-
   };
 
   return <BookContext.Provider value={value}>{children}</BookContext.Provider>;
