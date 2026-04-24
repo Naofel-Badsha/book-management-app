@@ -3,7 +3,7 @@ import { useBooks } from '../../Context/BookContext'
 import BookGrid from '../../Components/CardCom/BookGrid'
 
 const Shop = () => {
-  const { 
+  const {
     books,
     currentBook,
     loading,
@@ -13,10 +13,15 @@ const Shop = () => {
     fetchBooks,
     updateFilters,
   } = useBooks()
+
+  const handleDeleteBook = () => {
+    console.log("Delete books")
+  }
+
   return (
     <div>
       <div className="py-8 md:px-4">
-        <BookGrid books={books} loading={loading} error={error}/>
+        <BookGrid books={books} loading={loading} error={error} onDeleteBook={handleDeleteBook} />
       </div>
     </div>
   )
