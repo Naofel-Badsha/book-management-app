@@ -1,5 +1,6 @@
 import HeroSection from "../../Components/HomeComp/HeroSection";
 import { useBooks } from "../../Context/BookContext";
+import Shop from "../Shop/Shop";
 
 const Home = () => {
   const { books, currentBook, loading, error } = useBooks();
@@ -8,6 +9,7 @@ const Home = () => {
   return (
     <div>
       <HeroSection />
+      <Shop />
       {/*----------------All Books-----------------*/}
       <div className="container mx-auto">
        {books.length > 0 ? <div >
