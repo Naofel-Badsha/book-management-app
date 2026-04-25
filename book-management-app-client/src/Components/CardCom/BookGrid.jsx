@@ -1,4 +1,5 @@
 import React from 'react'
+import BookCard from './BookCard'
 
 const BookGrid = ({ books, loading, error, handleDeleteBook }) => {
     if (error) {
@@ -15,9 +16,7 @@ const BookGrid = ({ books, loading, error, handleDeleteBook }) => {
                 </div>
             ) : (
                 books.map((book) => (
-                    <div key={book._id}
-                        book={book}>                       
-                    </div>
+                    <BookCard key={book._id} book={book} handleDeleteBook={handleDeleteBook}/>
                 ))
             )}
         </div>

@@ -20,7 +20,7 @@ const Shop = () => {
 
   return (
     <div>
-      <div className="py-8 md:px-4">
+      <div className="py-8 md:px-4 container mx-auto">
         <BookGrid books={books} loading={loading} error={error} onDeleteBook={handleDeleteBook} />
       </div>
     </div>
