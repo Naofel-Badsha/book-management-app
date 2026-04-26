@@ -16,7 +16,7 @@ const BookGrid = ({ books, loading, error, handleDeleteBook }) => {
                 </div>
             ) : (
                 books.map((book) => (
-                    <BookCard key={book._id} book={book} handleDeleteBook={handleDeleteBook}/>
+                    <BookCard key={book._id} book={book} handleDeleteBook={handleDeleteBook} />
                 ))
             )}
         </div>

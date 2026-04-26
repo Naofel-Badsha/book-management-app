@@ -1,9 +1,9 @@
 import { FaEdit, FaTrash } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
-const BookCard = ({book, handleDeleteBook}) => {
+const BookCard = ({ book, handleDeleteBook }) => {
   return (
- <div className="group shadow-md rounded-lg">
+    <div className="group shadow-md rounded-lg">
       {/*------------Book Image-------------*/}
       <div className="aspect-square mb-4 overflow-hidden rounded-lg bg-yellow-100 p-8 relative group">
         <img
@@ -17,7 +17,7 @@ const BookCard = ({book, handleDeleteBook}) => {
           </Link>
         </div>
       </div>
-      
+
       {/*---------------Book Details-------------------*/}
       <div className="space-y-2 p-4">
         <h3 className="text-lg font-medium text-gray-900">
@@ -31,13 +31,13 @@ const BookCard = ({book, handleDeleteBook}) => {
             $ {book?.price.toFixed(2)} USD
           </p>
           <div className="flex space-x-2">
-            <Link 
+            <Link
               to={`/books/edit/${book._id}`}
               className="hover:text-[#000] bg-sky-500 text-white p-1 rounded-sm cursor-pointer"
             >
               <FaEdit />
             </Link>
-            <button 
+            <button
               onClick={() => handleDeleteBook(book._id)}
               className="hover:text-red-500 bg-orange-400 text-white p-1 rounded-sm cursor-pointer"
             >

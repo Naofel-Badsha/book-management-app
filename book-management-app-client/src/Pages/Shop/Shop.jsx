@@ -21,6 +21,10 @@ const Shop = () => {
   return (
     <div>
       <div className="py-8 md:px-4 container mx-auto">
+        {/*--------Result Summary----------*/}
+        <div className="my-8">
+          Showing { pagination.totalBooks > 0 ? (pagination.currentPage - 1) * filters.limit + 1 : 0 } - <span> {Math.min(pagination.currentPage * filters.limit, pagination.totalBooks)}</span> fo  Books
+        </div>
         <BookGrid books={books} loading={loading} error={error} onDeleteBook={handleDeleteBook} />
       </div>
     </div>
